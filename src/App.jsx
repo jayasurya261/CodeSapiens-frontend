@@ -10,7 +10,12 @@ import { supabase } from './lib/supabaseClient';
 import NavBar from './components/ui/NavBar';
 import Hero from './components/ui/Hero';
 import Footer from './components/ui/Footer';
-import { AuthForm} from './components/AuthForm';
+import AuthForm from './components/AuthForm';
+import Dashboard from './admin/Dashboard';
+import {BrowserRouter as Router, Routes,Route } from 'react-router-dom';
+import UserProfile from './user/UserProfile';
+import UserDashboard from './user/UserDashboard';
+import UserNavbar from './user/UserNavbar';
 
 function Root() {
   const session = useSession();   // reflects the current auth session
@@ -29,22 +34,30 @@ function Root() {
   if (!session) {
     return (
       <div className="flex flex-col min-h-screen">
-        <NavBar />
+       
         <main className="flex-grow flex items-center justify-center">
           <AuthForm />
         </main>
-        <Footer />
+       
       </div>
     );
   }
 
   return (
     <div className="flex flex-col min-h-screen">
-      <NavBar />
+      
       <main className="flex-grow">
-        <Hero />
+        <Router>
+          <UserNavbar />
+          <Routes>
+            <Route path="/admin" element={<Dashboard/>} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/dashboard" element={<UserDashboard/>} />
+          </Routes>
+        </Router>
+       
       </main>
-      <Footer />
+      
     </div>
   );
 }
